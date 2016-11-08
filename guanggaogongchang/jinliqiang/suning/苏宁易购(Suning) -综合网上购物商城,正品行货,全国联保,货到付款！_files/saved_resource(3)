@@ -1,0 +1,502 @@
+﻿/*
+	* mySuning.css：	苏宁易购账户相关页面 UI js文件
+	* Author：			秦玉国-moxiaohe 11080793
+	* Created:			2013-05-28 14:00
+	* Last Updated:		2013-05-28 17:23
+*/
+var account = account || {};
+account.autoLoginCookie = "_ids_al_check";
+
+//tab切换
+account.tabChange = function(handleWrap,objCont){
+	var handle = $(handleWrap).find("li");
+	//初始化状态为登录或注册
+
+	//点击切换
+	handle.click(function(){
+		var index = $(this).index();
+        if(index == 0){
+            $("#title-h3").text("欢迎您登录苏宁易购会员");
+        }
+        else{
+            $("#title-h3").text("欢迎您注册苏宁易购会员");
+        }
+		$(this).addClass("selected").siblings().removeClass("selected");
+		$(objCont).eq(index).show().siblings(objCont).hide();
+		$(".email-list").addClass("hide");
+	});
+};
+
+//激活时改变输入框边框色
+account.changeTextBorder = function(){
+	var uiText = $(".ui-text");
+	uiText.bind("focus",function(){
+		$(this).addClass("ui-text-focus");
+		$(this).parent("dd").addClass("dd-focus");
+	});
+	$(".default-name").bind("click",function(){
+		$(this).siblings("input").addClass("ui-text-focus").focus();    
+		$(this).parent("dd").addClass("dd-focus");
+		$(this).addClass("popregister-color");
+	});
+	var _utext = $(".user-name").find(".ui-text");
+	var _utext1 = $(".reg-user").find(".ui-text");
+	
+	if(_utext.val() != ''){
+		$(".user-name .ui-text").parents("dl").addClass("hide-def-name");
+	}
+	
+	if(_utext1.val() != ''){
+		$(".reg-user .ui-text").parents("dl").addClass("hide-def-name");
+	}
+	_utext.bind("blur",function(){
+		if($(this).val() == ''){
+			$(this).parent().parent().removeClass("hide-def-name")
+		}
+	});
+	_utext1.bind("blur",function(){
+		if($(this).val() == ''){
+			$(this).parent().parent().removeClass("hide-def-name")
+		}
+	});
+	uiText.bind("blur",function(){
+		$(this).removeClass("ui-text-focus");
+		$(this).parent("dd").removeClass("dd-focus");
+		$(this).siblings(".default-name").removeClass("popregister-color");
+	});
+	_utext.bind("keydown",function(){
+		var _username = $(".acc-form").find(".user-name");
+		if($("this").val() != ''){
+			_username.addClass("hide-def-name")
+		}else{
+			_username.removeClass("hide-def-name")
+		}
+	})
+	_utext1.bind("keydown",function(){
+		var _username1 = $(".acc-form").find(".reg-user");
+		if($("this").val() != ''){
+			_username1.addClass("hide-def-name")
+		}else{
+			_username1.removeClass("hide-def-name")
+		}
+	})
+
+};
+
+//输入清除
+account.iptWordsAct = function(act,obj){
+	var defaultValue = obj.defaultValue , value = $(obj).val();
+	if(act == "focus"){
+		if(value == defaultValue){
+			$(obj).val("").css("color","#333");
+		}
+	}
+	if(act == "blur"){
+		if(value == ""){
+			$(obj).val(defaultValue).css("color","#999");
+		}
+	}
+};
+
+//注册方式切换
+account.changeRegType = function(){
+	var wrap = $(".reg-type");
+	var handle = wrap.find("input");
+	handle.each(function(){
+		if(this.checked){
+			var index = $(this).parent("span").index();
+			var obj = $(this).parents(".tab-cont").find(".acc-form");
+			obj.eq(index).show().siblings(".acc-form").hide();
+		}
+	});
+	handle.change(function(){
+		var index = $(this).parent("span").index();
+		var obj = $(this).parents(".tab-cont").find(".acc-form");
+		obj.eq(index).show().siblings(".acc-form").hide();
+	});
+};
+
+account.winAct = function(opts,callback){
+	//opts.id -- 弹出框外围ID
+	//opts.isOpen -- 是否为打开操作
+	//opts.isImported -- 是否为子页面的弹窗
+	//opts.isFix -- 是否窗口定位 默认 true
+
+	var isIE6 = !-[1,] && !window.XMLHttpRequest,
+		obj = $("#"+opts.id),
+		wrapper = $("#winWrapper"),
+		box = wrapper.find("#winBox"),
+		maskIfm = wrapper.find(".maskIfm"),
+		isFix = opts.isFix || true,
+		html = obj.html(),
+		_h = obj.height()<=0 ? 150 : obj.height();
+	box.html(html);
+	winActResize(isFix,obj,wrapper,isIE6);
+	if(maskIfm){maskIfm.css({height:_h+"px"}).show();}
+
+	if(opts.isOpen){
+		wrapper.show();
+	}else{
+		wrapper.hide();
+	}
+
+	if(callback){
+		callback.apply(this,[opts.id]);
+	}
+   //背景透明层
+    //$(".opacity-mask").css({"width":box.width()+10,"height":box.height()+10});
+	//全屏弹出层
+	var screenIfm = $(".screen-iframe");
+	opts.isIframe?
+		screenIfm.css({width:'100%',height:$(document).height()+"px",opacity:0.3,backgroundColor:"#000"}).show()
+		:screenIfm.css({width:0,height:0}).hide();
+	//窗口改变时加载
+	window.onresize = function(){
+		winActResize(isFix,obj,wrapper,isIE6);
+	}
+
+};
+
+var winActResize = function(isFix,obj,wrapper,isIE6){
+	var _oW = obj.width(),
+		_oH = obj.height(),
+		_wH = $(window).height(),
+		_dW = $(document).width(),
+		_dS = $(document).scrollTop(),
+		_h = _oH<=0 ? 150 : _oH,
+	    _t = Math.max(0,( _wH - _h)/2);
+	wrapper.css({top:_t  + "px", 'left':( _dW - _oW)/2});
+	if(isFix){
+		wrapper.css({top:_t  + "px"});
+		wrapper.css('position', isIE6 ? 'absolute' : 'fixed');
+		isIE6 && $(window).scroll(function(){
+			var _top = Math.max(0,(_wH-_h)/2);
+			wrapper.css({
+				'top': _dS + _top,
+				'left':( _dW- _oW)/2
+			});
+		});
+	}
+}
+/*
+ * 邮箱自动补全
+ * tip 提示面板
+ * 
+ */
+account.autoFill = function(keyword,num){
+/* autoFill spase [[ */
+	var tip = !1 ,
+		n = num,//区分联想状态(1邮箱/2登陆名)
+	//	autoEmail = $(keyword).find('.auto-email'),
+		autoEmail = $(keyword),
+		emailTemp = autoEmail.find(".ui-text"),
+		tempV = '';
+	/* 点空白 关闭 提示面板 */
+	$(document).click(function(e){
+		var target = $(e.target);
+		if(target.hasClass('ui-text')) {
+			e.stopPropagation();
+		} else {
+			tip && tip.hide()//new 
+		}
+	});
+	//初始化
+	emailTemp[0]&&emailTemp.val()!=emailTemp[0].defaultValue&&emailTemp.val(emailTemp[0].defaultValue).css("color","#999");
+	/* 表单 各种事件 */
+	emailTemp.focus(function(){
+		var eInput = $(this),
+			value = eInput.val();
+			tip = eInput.siblings('.email-list');
+		$.trim(eInput.val()).length && eInput.change();
+
+		var sib = eInput.parents("dl").siblings("dl").find(".email-list");
+		sib && sib.hide();
+	}).keyup(function(e) {
+		var eInput = $(this),
+			key = e.keyCode,
+			value = eInput.val(),
+			current = tip.find('li.hover'),
+			len = tip.find("li").size(),
+			next = !1,
+			prev = !1,
+			allowKeyEvent = {
+			/* 支持的键盘事件 */
+				down : function(e, eInput){
+					var flag = current.index() > len-2;
+						if(flag) {
+							next = tip.find('li').first();
+							next.addClass('hover').siblings('li').removeClass('hover');
+						}
+					if (current.index() >= 0) {
+						 next = current.next();
+						 current.removeClass('hover').next().addClass('hover');
+						 tempV = next.html();
+					} else {
+						next = tip.find('li').first();
+						next.addClass('hover').siblings('li').removeClass('hover');
+						current = next;
+						tempV = next.html();
+					}
+
+				},
+				up : function(e, eInput){
+					if (current.index() > 0) {
+						 prev = current.prev();
+						 current.removeClass('hover').prev().addClass('hover');
+						tempV = prev.html();
+					} else {
+						prev = tip.find('li').last();
+						prev.addClass('hover').siblings('li').removeClass('hover');
+						tempV = prev.html();
+					}
+				},
+				enter : function(e, eInput){
+					e.preventDefault();
+					if(tempV.length){
+						eInput.val(tempV);
+					}	
+					var id = eInput.attr("id");
+//					if(id=="normalEmailReg_email"){
+//						checkEmailOnBlur2(normalEmailReg.email)
+//					}else{
+//						checkEmailOnBlur2(campusEmailReg.email)
+//					}
+					var t = setTimeout(function(){
+						tip.hide();
+						tip.html("");
+						eInput.focus();/* update 20140919 原失去焦点改为获取焦点 */
+						tempV = '';
+						clearTimeout(t);
+					}, 1);
+					return;
+				}
+			};
+		eInput.keydown();
+		if (key == 40) {//key down
+			allowKeyEvent.down(e, eInput);
+		}else if (key == 38) {//key up
+			allowKeyEvent.up(e, eInput);
+		}else if(key == 13) {
+			allowKeyEvent.enter(e, eInput);
+		}else {
+			emailTemp.change();
+		}
+
+	})/* end keyup */
+	.keydown(function(e){
+		if(e.keyCode == 32){
+			e.preventDefault();
+			return;
+		}
+		var eInput = $(this),
+			value = eInput.val();
+		if (value.length > 25 || value.length < 1) {
+			tip && tip.hide() && tip.html("");
+			return;
+		}
+	})/* end keydown */
+	.change(function(e) {
+		var eInput = $(this),
+			value = eInput.val(); 
+			
+		if (value.length > 25 || value.length < 1) { return; }
+		
+		if(/[\u4E00-\u9FA5]/i.test(value)){ /* 限制中文 */
+			tip.hide() && tip.html("");
+			return;
+		}
+		if(value.indexOf("@") < 0) {
+			value += "@";
+		}
+		var	prevStr = value.substring(value.indexOf("@"), 0),/* 存放@之前的字符串 */
+			nextStr = value.substring(value.indexOf("@")+1),/* 存放@之后的字符串 */
+			arr_email = ['qq.com','163.com','126.com','sohu.com','sina.com','hotmail.com'],
+			arr_emails = ['qq.com','163.com','126.com','sohu.com','sina.com','hotmail.com',
+			'gmail.com','foxmail.com','139.com','189.cn','tom.com ','hotmail.com.cn',
+			'sina.cn','vip.qq.com','vip.sina.com','vip.163.com','wo.com.cn','21cn.com','yeah.net','netease.com'],
+			reg = new RegExp("^"+nextStr);
+		    html="";
+			if(n == 2){
+				if(eInput.val().indexOf("@") > 0) {
+					html = "<ol>";
+				}else{
+					return;
+				}
+			}
+		var valueJustice = value.split("@");
+
+		if(valueJustice[1] == ''){	
+			$.each(arr_email, function(i, obj){
+				html += "<li title="+ prevStr + "@" + obj +">" + prevStr + "@" + obj + "</li>\n";
+			});
+		}else{
+			$.each(arr_emails, function(i, obj){
+				if(!reg.test(obj))return;
+			html += "<li title="+ prevStr + "@" + obj +">" + prevStr + "@" + obj + "</li>\n";
+			});
+		}	
+		html+='</ol>\n<!--[if lt IE 7]><iframe frameborder="0" scrolling="0" src=""></iframe><![endif]-->\n';
+		tip.html(html).children('iframe').width(tip.width()).height(tip.height());
+		tip.removeClass("hide").show(0,function(){
+			/* 提示面板各种事件 */
+			tip.find('li').bind('mouseover mouseout mousedown', function(e) {
+				if (e.type == 'mouseover') {
+					$(this).addClass('hover').siblings('li').removeClass('hover');
+					
+				} 
+				if (e.type == 'mousedown'){
+					
+					eInput.val(this.innerHTML);
+					eInput.blur();
+					tip.hide();
+					tip.html("");
+					var id = eInput.attr("id");
+//					if(id=="normalEmailReg_email"){
+//						checkEmailOnBlur2(normalEmailReg.email)
+//					}else{
+//						checkEmailOnBlur2(campusEmailReg.email)
+//					}
+					
+				}
+			});
+		});
+
+		if(tip.find('ol li').first().text() == value) {
+			tip.hide();
+		}
+		if(tip.find('ol li').first().text() == ''){
+			tip.hide();
+		}
+
+	});/* end change */
+/* ]] autoFill spase */
+};
+
+//登录页面激活时改变输入框边框色
+account.changeLoginTextBorder = function(){
+	var loginText = $(".entry .text")
+	var loginName = $(".login-name");
+	if(loginName.val() != ''){
+			$(this).parent().addClass("hide-label")
+	}
+	loginText.bind("focus",function(){
+		$(this).hasClass("login-name") && $(this).parent("dd").addClass("dd-focus");
+		$(this).addClass("focus");
+	});
+	loginText.bind("blur",function(){
+		$(this).removeClass("focus").parent("dd").removeClass("dd-focus");
+		if($(this).val()==''){
+			$(this).parent().removeClass("hide-label")
+		}
+	});
+	loginText.bind("keydown",function(){
+		if($("this").val() != ''){
+			$(this).parent("dd").addClass("hide-label")
+		}else{
+			$(this).parent("dd").removeClass("hide-def-name")
+		}
+	})
+};
+
+//自动登录复选框选中显示隐藏提示框
+account.tipBox = function () {
+		if($("#rememberMeCheck").attr('checked')){
+				$(".auto-login .warn-msg").show();
+			}else{
+				$(".auto-login .warn-msg").hide();
+			}
+		$("#rememberMeCheck").on("change",function () {
+			if($(this).prop('checked')){
+				$(".auto-login .warn-msg").show();
+            	account.autoLoginCheck(1,-1);
+			}else{
+				$(".auto-login .warn-msg").hide();
+            	account.autoLoginCheck(1,1);
+			}
+	})
+}
+//获取cookie
+account.getCookie = function(cookieName){   
+	var arrStr = document.cookie.split("; ");
+	for(var i = 0;i < arrStr.length;i ++){
+		var temp = arrStr[i].split("=");
+		if(temp[0] == cookieName){
+			return unescape(decodeURI(temp[1]));
+		}
+	}
+	return "";
+};
+//添加cookie 
+account.addCookieCommon = function(objName,objValue,objSecond,path,domain){
+	objValue =  encodeURI(objValue);
+	var str = objName + "=" + objValue;   	  
+	var date = new Date(); 
+	var ms = objSecond * 1000; 
+	date.setTime(date.getTime() + ms); 
+	str += ";expires=" + date.toGMTString(); 
+	if(path){
+		str += ";path=" + path; 
+	}
+	if(domain){
+		str += ";domain=" + domain; 
+	}
+	document.cookie =  str;  
+}
+account.autoLoginCheck = function(type,val){
+	if(type == 0){
+		var flag = account.getCookie(account.autoLoginCookie);
+   		var check = $(".auto-login input");
+    	var warn = $(".warn-msg");
+		if(!check.prop("checked")){
+			warn.hide();
+		}
+		if(flag == 1 && check.prop("checked")){
+			$("#rememberMeCheck").click();
+            warn.hide();
+		}
+	}else{
+		var exTime = 30 * 24 * 3600;
+		if(typeof(autoLoginCookie_expireDay) != "undefined"){
+			exTime = autoLoginCookie_expireDay * 24 * 3600;
+		}
+		account.addCookieCommon(account.autoLoginCookie,val,exTime,"/ids",window.location.host);
+	}
+};
+$(document).ready(function(){
+	//文本输入框 keydown 状态
+	account.changeTextBorder();
+	account.changeLoginTextBorder();
+	//注册方式切换
+	account.changeRegType();
+
+	//tab切换
+	account.tabChange("#tabWrap",".tab-cont");
+
+	//邮箱自动填充
+	account.autoFill("#_loginForm .auto-email",2);
+
+	//自动登录复选框选中显示隐藏提示框
+	account.tipBox();
+	
+});
+/*popupContainerHandler.js v2013-11-18 12061710 */
+if (typeof popup_container_handler_config == 'undefined') {
+    alert('You must define popup_container_handler_config var.');
+}
+
+$(function () {
+    resize();
+    $("#close-pop").click(function () {
+        closePopup();
+    });
+});
+
+function closePopup() {
+    parent.location.href = popup_container_handler_config.topLocation + "#close:";
+}
+
+function resize() {
+    var url = popup_container_handler_config.topLocation + "#resize:";
+    $document = $(document);
+    parent.location.href = url + $document.width() + "," + $document.height();
+}

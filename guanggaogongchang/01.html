@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8">
+    <!-- 让 Bootstrap 兼容 IE 兼容模型 -->
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- 让 Bootstrap 兼容 国产浏览器的高速模型 -->
+    <meta name="renderer" content="webkit">
+    <!-- 实现响应式的设置 -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bootstrap 101 Template</title>
+    <!-- 引入 Bootstrap 的 CSS 文件 -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/intel.css" rel="stylesheet">
+
+    <!-- 
+    IE 9版本之前的 IE 浏览器并不支持 HTML 5 提供的新标签
+    通过 html5shiv.js 文件实现兼容
+-->
+    <!-- 
+    IE 9版本之前的 IE 浏览器并不支持 CSS 3 提供的媒体查询
+    通过 respond.js 文件实现兼容
+-->
+    <!--[if lt IE 9]>
+<script src="js/html5shiv.min.js"></script>
+<script src="js/respond.min.js"></script>
+<![endif]-->
+</head>
+<body>
+<!--导航条-->
+<div class="nav navbar-default navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <a class="navbar-brand logo" href="#"></a>
+            <a class="navbar-toggle" data-toggle="collapse" href="#menu">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </a>
+        </div>
+        <div id="menu" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>
+                    <a href="#">首页</a>
+                </li>
+                <li class="active ">
+                    <a href="#" data-toggle="dropdown">菜单 <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">英特尔产品</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">英特尔产品</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">英特尔产品</a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">英特尔产品</a></li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">简体中文</a></li>
+                <li class="dropdown" >
+                    <a href="#" data-toggle="dropdown">登录</a>
+                    <div class="dropdown-menu logo-menu">
+                        <div class="login-menu">
+                        <h3>登录</h3>
+                            <form action="">
+                            <div class="form-group">
+                                <label for="uname">用户名：</label>
+                                <input class="form-control" id="uname" type="text">
+                            </div>
+
+                            <div class="form-group">
+                                <label for="upwd">密码：</label>
+                                <input class="form-control" id="upwd" type="text">
+                            </div>
+
+                             <div class="form-group">
+                                 您登录表明您同意我们的使用条款。
+                             </div>
+
+                            <div class="form-group">
+                                <input type="button" value="登陆" class="btn btn-info btn-xs">
+                            </div>
+                        </form>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <form action="" class="navbar-form navbar-right">
+                <div class="form-group has-feedback">
+                    <label for="search" class="sr-only">搜索</label>
+                    <input type="text" class="form-control" id="search" placeholder="搜索">
+                    <span class="glyhicon glyphicon-search form-control-feedback"></span>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!--导航条结束-->
+
+<!--主体部分-->
+<div class="main">
+    <div class="container">
+        <h2>欢迎来到英特尔&copy;</h2>
+        <div class="row">
+            <div class="col-md-8  col-xs-12">
+                <div>
+                    <img class="img-responsive" src="imag/intel.web.864.486.1.jpg" alt="">
+                </div>
+            </div>
+            <div class="col-md-4  col-xs-12">
+                <div class="row">
+                    <div class="col-md-12 col-sm-6 col-xs-12">
+                        <div>
+                            <img class="img-responsive" src="imag/intel.web.368.207.1.jpg" alt="">
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-6 col-xs-12">
+                        <div>
+                            <div class="media">
+                                <div class="media-left">
+                                    <img src="imag/intel.web.81.108.png" alt="">
+                                </div>
+                                <div class="media-body">
+                                    <ul class="list-unstyled">
+                                        <li><a href="#">英特尔一体机</a></li>
+                                        <li><a href="#">英特尔一体机</a></li>
+                                        <li><a href="#">英特尔一体机</a></li>
+                                        <li><a href="#">英特尔一体机</a></li>
+                                        <li><a href="#">英特尔一体机</a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8 col-md-push-4 col-xs-12">大</div>
+            <div class="col-md-4 col-md-pull-8 col-xs-12">
+                <div class="row">
+                    <div class="col-md-12 col-sm-6 col-xs-12">小</div>
+                    <div class="col-md-12 col-sm-6 col-xs-12">小</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8  col-xs-12">大</div>
+            <div class="col-md-4  col-xs-12">
+                <div class="row">
+                    <div class="col-md-12 col-sm-6 col-xs-12">小</div>
+                    <div class="col-md-12 col-sm-6 col-xs-12">小</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--版权声明部分-->
+<div class="footer">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-md-6 col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>关于英特尔</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>关于英特尔</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-sm-12">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h3>关于英特尔</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <h3>关于英特尔</h3>
+                        <ul class="list-unstyled">
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                            <li><a href="#">公司信息</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+<!-- 引入 jQuery 文件 -->
+<script src="js/jquery-1.11.3.js"></script>
+<!-- 引入 Bootstrap 的 JS 文件 -->
+<script src="js/bootstrap.js"></script>
+<script>
+    /*Bootlint工具用于对页面中的HTML标签以及Bootstrapclass的使用进行检测*/
+    (function () {
+        var s = document.createElement("script");
+        s.onload = function () {
+            bootlint.showLintReportForCurrentDocument([]);
+        };
+        s.src = "js/bootlint.js";
+        document.body.appendChild(s)
+    })();
+</script>
+</body>
+</html>

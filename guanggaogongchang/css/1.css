@@ -1,0 +1,50 @@
+body {
+  border: 4px double #e4393c;
+}
+div {
+  margin: 0;
+  padding: 0;
+}
+.bordere {
+  border-top: 1px solid #aaa;
+  border-bottom: 2px solid #bbb;
+}
+.alert {
+  border-top: 1px solid #aaa;
+  border-bottom: 2px solid #bbb;
+  color: #ccc;
+}
+.well {
+  border-top: 1px solid #aaa;
+  border-bottom: 2px solid #bbb;
+  background: #eee;
+}
+.collapse {
+  -webkit-transition: opacity 2s;
+  -moz-transition: opacity 2s;
+  -ms-transition: opacity 2s;
+  -o-transition: opacity 2s;
+  transition: opacity 2s;
+}
+.modal {
+  -webkit-transition: opacity 3s;
+  -moz-transition: opacity 3s;
+  -ms-transition: opacity 3s;
+  -o-transition: opacity 3s;
+  transition: opacity 3s;
+}
+#navbar {
+  height: 50px;
+}
+#navbar ul {
+  list-style: none;
+}
+#navbar ul > li {
+  float: left;
+}
+#navbar a {
+  line-height: 50px;
+}
+#navbar a:hover {
+  text-decoration: underline;
+}

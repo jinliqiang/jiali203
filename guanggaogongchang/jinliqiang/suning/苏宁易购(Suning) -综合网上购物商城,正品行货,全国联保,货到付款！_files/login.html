@@ -1,0 +1,1088 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!-- saved from url=(0240)https://passport.suning.com/ids/login?service=https%3A%2F%2Fssl.suning.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FpopupLoginSuccess%3FstoreId%3D10052%26catalogId%3D10051%26topLocation%3Dhttp%253A%252F%252Fwww.suning.com%252F&loginTheme=b2c_pop -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>登录弹框</title>
+	
+	
+	<meta http-equiv="pragma" content="no-cache">
+	<meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+	<meta http-equiv="expires" content="0">
+	<link type="text/css" href="saved_resource(2)" rel="stylesheet">
+	<style type="text/css">
+		.win-wrapper{position:absolute;z-index:998;top: 39px;}
+		.dialog-lion{ position: absolute;top: -39px;left: 6px;z-index: 1000;}
+	</style>
+	<script type="text/javascript" async="" src="aywmq_qt(1).js"></script><script type="text/javascript" src="jquery-1.7.1.js"></script>
+	<script type="text/javascript">
+		//图片等静态资源路径路径
+		//dev:   https://b2cdev.cnsuning.com/webapp/wcs/stores/ConsumerDirectStorefrontAssetStore/
+		//sit:   https://sit1imgssl.suning.com
+		//pre:   https://preimgssl.suning.com
+		//prd:   https://imgssl.suning.com
+		//登录页面js的开始
+
+		// DEV; SIT; PRE; PRD
+		var envType = "PRD";
+		//服务器的前缀
+		var server_prefix_url = "";
+		//ASC服务器地址
+		var asc_prefix_domain = "";
+		//Passport服务器地址
+		var passport_domain = "";
+		//验证门店公司卡
+		var companycard_url = "";
+		//注册系统服务器地址
+		var persion_pop_url="";
+		//通用绑定页面地址
+		var comm_bind_url = "";
+
+		if(envType == "DEV"){
+			server_prefix_url = "https://b2cdev.cnsuning.com/webapp/wcs/stores/servlet/";
+			asc_prefix_domain = "https://aqsit.cnsuning.com/asc";
+			srs_prefix_domain = "https://regsit.cnsuning.com/";
+			passport_domain   = "https://passportdev.cnsuning.com";
+			companycard_url   = "https://regsit.cnsuning.com/companycardshow.do";
+			persion_pop_url  = "https://regsit.cnsuning.com/popreg.do";
+			sop_prefix_domain = "https://sopsslsit.cnsuning.com/";
+			comm_bind_url = "https://regsit.cnsuning.com/commThirdPartyLogOrReg.do";
+		}else if(envType == "SIT"){
+			server_prefix_url = "https://sslsit.cnsuning.com/emall/";
+			asc_prefix_domain = "https://aqsit.cnsuning.com/asc";
+			srs_prefix_domain = "https://regsit.cnsuning.com/";
+			passport_domain   = "https://passportsit.cnsuning.com";
+			companycard_url   = "https://regsit.cnsuning.com/companycardshow.do";
+			persion_pop_url  =   "https://regsit.cnsuning.com/popreg.do";
+			sop_prefix_domain = "https://sopsslsit.cnsuning.com/";
+			comm_bind_url = "https://regsit.cnsuning.com/commThirdPartyLogOrReg.do";
+		}else if(envType == "PRE"){
+			server_prefix_url = "https://sslpre.cnsuning.com/emall/";
+			asc_prefix_domain = "https://aqpre.cnsuning.com/asc";
+			srs_prefix_domain = "https://regpre.cnsuning.com/";
+			passport_domain   = "https://passportpre.cnsuning.com";
+			companycard_url   = "https://regpre.cnsuning.com/companycardshow.do";
+			persion_pop_url = "https://regpre.cnsuning.com/popreg.do";
+			sop_prefix_domain = "https://sopsslpre.cnsuning.com/";
+			comm_bind_url = "https://regpre.cnsuning.com/commThirdPartyLogOrReg.do";
+		}else if(envType == "PRD"){
+			server_prefix_url = "https://ssl.suning.com/emall/";
+			asc_prefix_domain = "https://aq.suning.com/asc";
+			srs_prefix_domain = "https://reg.suning.com/";
+			passport_domain   = "https://passport.suning.com";
+			companycard_url   = "https://reg.suning.com/companycardshow.do";
+			persion_pop_url = "https://reg.suning.com/popreg.do";
+			sop_prefix_domain = "https://sopssl.suning.com/";
+			comm_bind_url = "https://reg.suning.com/commThirdPartyLogOrReg.do";
+		}else{
+			server_prefix_url = "https://ssl.suning.com/emall/";
+			asc_prefix_domain = "https://aq.suning.com/asc";
+			srs_prefix_domain = "https://reg.suning.com/";
+			passport_domain   = "https://passport.suning.com";
+			companycard_url   = "https://reg.suning.com/companycardshow.do";
+			persion_pop_url = "https://reg.suning.com/popreg.do";
+			sop_prefix_domain = "https://sopssl.suning.com/";
+			comm_bind_url = "https://reg.suning.com/commThirdPartyLogOrReg.do";
+		}
+        
+        var autoLoginCookie_expireDay = 30;
+		//人工审核地址
+		var asc_selfService_url = asc_prefix_domain + "/selfService/show.do";
+		
+		var needVerifyCodeVal=true;
+
+		//是否中文验证码
+		var chineseValiCode = "false";
+
+		//忘记密码
+		var getSecret_URL = asc_prefix_domain+"/forgetpsw.do";
+
+		String.prototype.replaceAll  = function(s1,s2){
+			return this.replace(new RegExp(s1,"gm"),s2);
+		}
+		//保存是从哪里请求的路径  将请求路径中的&amp; 替换为 &
+		var serviceStr=decodeURIComponent("https://ssl.suning.com/webapp/wcs/stores/servlet/popupLoginSuccess?storeId=10052&amp;catalogId=10051&amp;topLocation=http%3A%2F%2Fwww.suning.com%2F");
+		serviceStr = serviceStr.replaceAll('&amp;','&');
+		if (serviceStr.substring(0, serviceStr.indexOf("popupLoginSuccess")).indexOf("?") > 0) {
+			serviceStr = serviceStr.substring(serviceStr.indexOf("topLocation") + 12);
+			if (serviceStr.indexOf("?") > 0) {
+				serviceStr = serviceStr.substring(0, serviceStr.indexOf("?"));
+			}
+			if (serviceStr.indexOf("&") > 0) {
+				serviceStr = serviceStr.substring(0, serviceStr.indexOf("&"));
+			}
+		}else{
+			serviceStr = serviceStr.substring(serviceStr.indexOf("topLocation") + 12); //已解码
+			serviceStr = encodeURIComponent(serviceStr);
+		}
+		//最终得到编码后的topLocation
+
+		//弹出注册的地址  serviceStr:已经编码，不能进行解码等操作
+		//var register_URL  = server_prefix_url + "SNPassPortRegView?langId=-7&storeId=10052&catalogId=10051&topLocation="+serviceStr;
+		//注册切换到新系统
+		var  register_URL = persion_pop_url+"?topLocation="+serviceStr;
+		var popup_container_handler_config = {
+			topLocation : decodeURIComponent(serviceStr)
+		};
+
+		//弹出满座弹窗的目标URL
+		var getMZURL = server_prefix_url + "CheckMZUserInfoCmd?storeId=10052&catalogId=10051&targetUrl="+decodeURIComponent(serviceStr);
+
+		//会员卡连接地址
+		var memberCard_URL  = srs_prefix_domain + "b2cMemberCard/offline/cardLogin.do";
+
+		// 图片验证码输错三次才刷新
+		var gImgVerCdeErrorCount = 0;
+
+		// BTCMEMII-2121, 2014-08-07, YuHui, 不重复校验相同的图片验证码
+		// 最近一次输入的图片验证码
+		var gLastImgValCode = "";
+
+		var checkLoginNameStatus=false;
+		var checkLoginPwdStatus= false;
+		var checkLoginVerifyCdeStatus=false;
+
+		// 检查是否是上次用Ajax校验过的图片验证码，如果是，返回true, 如果不是，则记录下来，返回false
+		function isLastImgValCode(code) {
+			if (gLastImgValCode == code) {
+				return true;
+			} else {
+				gLastImgValCode = code;
+				return false;
+			}
+		}
+
+		// 初始化图片验证码动态校验状态
+		function initImgValCodeDynamicCheck() {
+			gImgVerCdeErrorCount = 0;
+			gLastImgValCode = "";
+		}
+
+		// END of BTCMEMII-2121
+
+		//设置路径
+		function setURL(){
+			$("#get_secret_id").attr("href",getSecret_URL);
+			$("#registerBtn").attr("href",register_URL);
+		}
+
+		//跳转到弹出注册页面
+		function registerClick(){
+			window.location.href = register_URL;
+		}
+
+		//初始化显示图片验证码是否显示
+		function initShowVerifyCode(){
+			if(needVerifyCodeVal){
+				$("#checkCodeBlock").show();
+			}else{
+				$("#checkCodeBlock").hide();
+			}
+		}
+
+		//显示服务器返回的错误信息
+		function showServerErrorMsg() {
+
+			var errorCode='';
+			var errorMessage='';
+			var remainTimes =  '';
+			var snMemberErrorCode = '';
+			var logonId = '';
+			//只要有错误提示语，就不要现在满座网用户的登录状态 add by 12072549
+			if( errorCode!="" ||errorMessage!=""||snMemberErrorCode!="" ){
+				$("#manzuoWinBox").addClass("hide");
+				$("#normalwinBox").removeClass("hide");
+			}
+
+			//snMemberErrorCode中的错误提示信息
+			if(snMemberErrorCode=="E4700A40"){
+				errorMessage = "该账号密码存在安全风险，请立即<a href='"+getSecret_URL+"' target='_blank' style='float:none'>重置密码</a>。";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700440" ||
+					snMemberErrorCode=="E4700A37" ||
+					snMemberErrorCode=="E4700456" ){
+				//E4700456 卡不存在
+				errorMessage = "该账户名不存在，<a href='#' name='TLogon_index_none_dl007' onclick='javascript:forgetLoginName();'>忘记账户名</a>或";
+				errorMessage = errorMessage + "<a href='javascript:registerClick();'>注册新账号</a>?";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700451"){
+				//存在多个会员卡（重复卡）	会员卡异常，请至门店更换会员卡！
+				errorMessage =  "会员卡异常，请至门店更换会员卡！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700464"){
+				//您的会员账号出现异常，请联系4008-365-365！
+				errorMessage = "您的会员账号出现异常，请联系4008-365-365！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700480"){
+				//卡类型为非个人卡类型（公司卡）	非个人卡会员暂不提供线上验证功能！
+				errorMessage = "非个人卡会员暂不提供线上验证功能！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700000"){
+				errorMessage = "不好意思，系统繁忙，请稍后再试！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700013"){
+				//数据库操作出错	不好意思，系统繁忙，请稍后再试！
+				errorMessage = "不好意思，系统繁忙，请稍后再试！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700450"){
+				errorMessage = "会员资料不完整您的会员卡资料不完整，为保证您的账户安全，请携带会员卡及有效证件到就近门店补全资料！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700443"){
+				errorMessage = "您的会员卡已被锁定，请联系4008-365-365！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700B03"){
+				//E4700456 会员卡首次登录
+				var jumpUrl = memberCard_URL + "?cardInfo=" + logonId;
+				errorMessage = "会员卡首次登录请点击<a href='" + jumpUrl + "' target='_blank' >门店会员卡首次登录</a>进行操作";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E0000001"){
+				//ESB不通
+				errorMessage = "不好意思，系统繁忙，请稍后再试！";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="ECARD_UNBIND"){
+				//团体卡登录（未绑定易购账号）
+				errorMessage="非个人会员卡暂不支持登录验证，您可以进行<a name='Logon_index_denglu008' href='"+companycard_url+"' target='_blank' style='float:none'>验证注册</a>或更换其他账号登录。";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700N07"){
+				//手机存在多张会员卡
+				var jumpUrl = memberCard_URL + "?cardInfo=" + logonId;
+				errorMessage = "会员卡登录请点击<a href='" + jumpUrl + "' target='_blank' >门店会员卡登录</a>进行操作";
+				showTopErrorMsg(errorMessage);
+				return;
+			}else if(snMemberErrorCode=="E4700N11"){
+				//E4700N11 手机为团体会员的联系人手机，不能登录
+				errorMessage = "该账户名不存在，<a href='#' name='TLogon_index_none_dl007' onclick='javascript:forgetLoginName();'>忘记账户名</a>或";
+				errorMessage = errorMessage + "<a href='javascript:registerClick();'>注册新账号</a>?";
+				showTopErrorMsg(errorMessage);
+				return;
+			}
+
+
+			//errorCode类型的错误提示信息
+			if(errorCode=="badVerifyCode"){
+				$("#quickLogon_imageValCodeBox").show();
+				showTopErrorMsg("验证码不正确，请重新输入。");
+			}if(errorCode=="needVerifyCode"){
+				$("#quickLogon_imageValCodeBox").show();
+				showTopErrorMsg("请输入验证码！");
+			}else if(errorCode=="badPassword.msg1"){
+				showTopErrorMsg("您输入的账户名与密码不匹配，请重新输入！<a name='TLogon_index_none_dl006' href='"+getSecret_URL+"' target='_blank' style='float:none'>忘记密码</a>或<a href='#' onclick='javascript:forgetLoginName();return false;'>账户名</a>？");
+			}else if(errorCode=="badPassword.msg2"){
+				showTopErrorMsg("密码错误，您还可以尝试"+remainTimes+"次，<a href='"+getSecret_URL+"' target='_blank' style='float:none'>点此找回密码</a>?");
+			}else if(errorCode=="unknownUsername"){
+				errorMessage = "该账户名不存在，<a href='#' name='TLogon_index_none_dl007' onclick='javascript:forgetLoginName();'>忘记账户名</a>或";
+				errorMessage = errorMessage + "<a href='javascript:registerClick();'>注册新账号</a>?";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode=="lockedBySystem"){
+				if(isDigit(logonId)&&(logonId.length==12)){
+					errorMessage= "您的会员卡已被锁定，请联系4008-365-365";
+				}else{
+					errorMessage = "密码错误10次，您可以<a href='"+getSecret_URL+"' target='_blank' style='float:none'>找回密码</a>，或1小时后再试。";
+				}
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode=="lockedByManual"){
+				errorMessage = "您的账号已经被锁定，请联系客服<br/>4008-365-365进行解锁。";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode=="notOnlineMember"){
+				//会员卡未绑定
+				var jumpUrl = memberCard_URL + "?cardInfo=" + logonId;
+				errorMessage = "会员卡首次登录请点击<a href='" + jumpUrl + "' target='_blank' >门店会员卡首次登录</a>进行操作";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode=="imperfectMemberCard"){
+				errorMessage = "您的会员卡资料不完整，为保证您的账户安全，请携带会员卡及有效证件到就近门店补全资料！";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode=="badPwdOfNotBindingMemberCard.msg1"){
+				errorMessage = "会员卡号和密码不匹配，请重新输入！";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode=="badPwdOfNotBindingMemberCard.msg2"){
+				errorMessage=  "会员卡号和密码不匹配，请重新输入，您还有一次输入机会，密码错误5次后，您的会员卡账号将会被锁定！";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode == "highRiskAccount"){
+				// 高危用户
+				var snapshotId = '';
+				var jumpUrl = asc_prefix_domain + "/highrisk/getinfo.do?ticket=" + snapshotId;
+				errorMessage = "该账号密码存在安全风险，请<a href='"+jumpUrl+"' target='_blank'>验证并修改密码</a>。";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode == "suspectedHighRiskAccount"){
+				// 疑似高危用户
+				var snapshotId = '';
+				var jumpUrl = asc_prefix_domain + "/highrisk/getinfo.do?ticket=" + snapshotId;
+				errorMessage = "该账号密码存在安全风险，请<a href='"+jumpUrl+"' target='_blank'>验证并修改密码</a>。";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode == "sopSuspectedHighRiskAccount"){
+				// SOP疑似高危用户
+				var snapshotId = '';
+				var jumpUrl = sop_prefix_domain + "sel/member/toForward.htm?ticket=" + snapshotId;
+				errorMessage = "该账号密码存在安全风险，请<a href='"+jumpUrl+"' target='_blank'>重置密码</a>后再登录。";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode == "maliciousRegister"){
+				// 恶意注册用户
+				var snapshotId = '';
+				var jumpUrl = asc_prefix_domain + "/maliciousreg/getinfo.do?ticket=" + snapshotId;
+				errorMessage = "该账号密码存在安全风险，请<a href='"+jumpUrl+"' target='_blank'>验证身份</a>。";
+				showTopErrorMsg(errorMessage);
+			}else if(errorCode == "suspiciousLogin"){
+				//异地登陆用户
+				var parentUrl = serviceStr;
+				var snapshotId = '';
+				var jumpUrl = asc_prefix_domain + "/loginpro/getinfo.do?ticket=" + snapshotId+"&parentUrl ="+parentUrl +"&targetUrl="+encodeURIComponent(parentUrl)+"&_T="+ Math.random();
+				errorMessage = "该账号存在安全风险，请<a  href='"+jumpUrl+"' target='_blank'>验证身份</a>。";
+				showTopTipMsg(errorMessage);
+			}else if(errorCode == "sopSuspiciousLogin"){
+				//sop异地登陆用户
+				errorMessage = "尊敬的商家，请至<a target='blank' href='" + sop_prefix_domain + "'>苏宁云台</a>进行登录";
+				showTopTipMsg(errorMessage);
+			}else if(errorCode == "noAliasName"){
+		   		//无别名
+				errorMessage = "您的资料完善度较低，账号存在安全风险。请立即<a target='blank' href='" + asc_selfService_url + "'>人工审核</a>";
+				showTopErrorMsg(errorMessage);
+		   	}else if(errorCode == "lockedBySelf"){
+		   		//自助锁定
+		   		var snapshotId = '';
+		   		var unlockUrl = asc_prefix_domain + "/unlockacct/checklist.do?ticket="+snapshotId;
+				errorMessage = "您的账号已申请锁定，暂时无法登录，您可以：<a target='blank' href='" + unlockUrl + "'>解锁账号</a>";
+				showTopErrorMsg(errorMessage);
+		   	}else if(errorCode!=""){
+		   		errorMessage = errorMessage!="" ? errorMessage : "不好意思，系统繁忙，请稍后再试！";
+				showTopErrorMsg(errorMessage);
+			}
+		}
+
+		//显示错误提示信息
+		function showOtherErrMsg(errorMessage){
+			$("#loginOtherErrMsg").html(errorMessage);
+			$("#loginOtherErrMsgDiv").show().removeClass("page-error hide").addClass("page-error");
+		}
+
+		//忘记账户名
+		function forgetLoginName(){
+			showTopTipMsg("您可以使用手机号/邮箱/用户名/门店会员卡进行登录。");
+		}
+
+		//图片验证码的异步校验
+		//isSubmit：是否进行提交 true：表示验证成功之后进行提交操作 ； false：表示仅仅进行验证
+		function checkImageValCode(isSubmit) {
+			//用户输入的验证码code
+			//var code = encodeURIComponent($("#loginVerifyCde").val());
+			//请求时所传参数
+			//var param = "code=" + code + "&uuid=" + "760f53a1-9624-40ee-a7c1-3a5619e8c64a" + "&delFlag=0";
+			var code = $("#loginVerifyCde").val();
+			var param = {
+				code : code,
+				uuid : "760f53a1-9624-40ee-a7c1-3a5619e8c64a",
+				delFlag : 0
+			};
+			$.ajax({
+				//请求类型
+				type : 'POST',
+				//发送验证请求的url
+				url : "https://vcs.suning.com/vcs/validate_jsonp.htm",
+				//请求时所传参数
+				data : param,
+				//返回数据类型
+				dataType : 'jsonp',
+				//回调函数方法名
+				jsonp : 'callback',
+				//请求成功后的回调函数
+				success : function(data) {
+					//显示验证结果
+					if(data[0].result == "true"){
+						showVerifyCodeOK();
+						if(isSubmit){
+							//进行提交操作
+							submitForm();
+						}
+					}else{
+						showVerifyCodeError();
+						if(isSubmit){
+							showTopErrorMsg("验证码不正确，请重新输入。");
+						}
+						gImgVerCdeErrorCount++;
+						if (gImgVerCdeErrorCount >= 3 || isSubmit) {
+							changeImage();
+						}
+					}
+				}
+			});
+		}
+
+
+
+		//大写打开事件
+		function checkCapsLock(evt,messagePlace){
+			//兼容IE和Firefox获得keyBoardEvent对象
+			evt = (evt) ? evt : ((window.event) ? window.event : "")
+			//兼容IE和Firefox获得 keyBoardEvent对象的键值
+			var keyCode = evt.keyCode?evt.keyCode:evt.which;
+
+			var isShift  =  evt.shiftKey ||(keyCode  ==   16 ) || false ;
+			//<%-- Caps Lock 打开，且没有按住shift键 --%>
+			//<%-- Caps Lock 打开，且按住shift键 --%>
+			if (((keyCode >=   65   &&  keyCode  <=   90 )  &&   !isShift)
+					|| ((keyCode >=   97   &&  keyCode  <=   122 )  &&  isShift)
+			){
+				//$(messagePlace).removeClass("c-error").html("键盘大写锁定已打开，请注意大小写 。");
+				showCapsLockInfo();
+			}else{
+				//$(messagePlace).html("");
+				hideCapsLockInfo();
+			}
+		}
+
+		//登录前台页面输入参数校验
+		function validateLoginData(){
+			checkLoginName();
+			// fix BTCMEMII-1168 改成一个一个检查
+			if(!checkLoginNameStatus){
+				return false;
+			}
+			checkLoginPwd();
+			if(!checkLoginPwdStatus){
+				return false;
+			}
+			return true;
+		}
+
+		function checkLoginName(){
+			var loginName = $("#loginName").val();
+			if(loginName.Trim().length==0){
+				$("#loginName").val("");
+				//xx$("#loginNameErrMsg").html("请输入用户名/邮箱/手机号！");//add by 12072549 BTCMEMII-884
+				showTopErrorMsg("请输入用户名/邮箱/手机号。");
+				checkLoginNameStatus = false;
+			}else{
+				hideTopErrorMsg();
+				checkLoginNameStatus = true;
+			}
+		}
+
+		function loginNameOnblur(){
+			var loginName = $("#loginName").val();
+			loginName = loginName.Trim();
+			//hideTopErrorMsg();
+			if(loginName.length==0){
+				checkLoginNameStatus = false;
+				return;
+			}else{
+				jQuery.ajax( {
+					type : 'POST',
+					url : 'needVerifyCode',
+					data : 'username='+encodeURIComponent(loginName),
+					dataType : 'json',
+					success : function(data) {
+						if(data&& data.needVerifyCode){
+							if (!needVerifyCodeVal) {
+								needVerifyCodeVal=true;
+								//xx $("loginVerifyCdeErrMsg").html("");
+								//hideTopErrorMsg();
+								$("#checkCodeBlock").show();
+								resize();
+							}
+						}else if(data&& !data.needVerifyCode){
+							if (needVerifyCodeVal) {
+								needVerifyCodeVal=false;
+								//xx$("loginVerifyCdeErrMsg").html("");
+								//hideTopErrorMsg();
+								$("#checkCodeBlock").hide();
+								resize();
+							}
+						}
+					},
+					error : function(data) {
+					}
+				});
+				//xx$("#loginNameErrMsg").html("");
+				//hideTopErrorMsg();
+				checkLoginNameStatus = true;
+			}
+		}
+
+		function checkLoginPwd(){
+			var pwd = $("#loginPassword").val();
+			pwd = pwd.Trim();
+			if (pwd.length < 6 || pwd.length > 20) {
+				showTopErrorMsg("请输入6-20位密码。");
+				checkLoginPwdStatus = false;
+			}else{
+				//xx$("#loginPwdErrMsg").html("");
+				hideTopErrorMsg();
+				checkLoginPwdStatus = true;
+			}
+		}
+
+		function checkLoginVerifyCode(isSubmit){
+			//图片验证码的异步校验
+			//isSubmit：是否进行提交 true：表示验证成功之后进行提交操作 ； false：表示仅仅进行验证
+			var verifyCde = $("#loginVerifyCde").val();
+
+			// BTCMEMII-2121
+			if (!isSubmit && isLastImgValCode(verifyCde)) {
+				return;
+			}
+
+			if(Public.isNullOrEmpty(verifyCde) || "undefined" == verifyCde){
+				//$("#loginVerifyCdeErrMsg").html("请输入验证码！");
+				//checkLoginVerifyCdeStatus = false;
+				if (isSubmit){
+					//xx$("#loginVerifyCdeErrMsg").html("请输入验证码！");
+					showVerifyCodeError();
+					showTopErrorMsg("请输入验证码！");
+				}else{
+					//xx$("#loginVerifyCdeErrMsg").html("");
+					hideTopErrorMsg();
+				}
+				//}else if((verifyCde.length == 4 && isAllLetterOrNum(verifyCde))||(verifyCde.length == 3 && isChn(verifyCde))){
+			}else if(verifyCde.length == 4){
+				// BTCMEMII-2038 注册登录时出现中文验证码问题(英文、汉字验证码全部改为4位)
+				hideTopErrorMsg();
+				//进行图片验证码的异地校验isSubmit：表示校验之后时候进行提交操作
+				if(chineseValiCode == "true"){
+					if(isChineseStr(verifyCde)){
+						checkImageValCode(isSubmit);
+					}
+				}else{
+					checkImageValCode(isSubmit);
+				}
+			}
+		}
+
+		//是否全是中文
+		function isChineseStr(str){
+		  	var reg = /^[\u4e00-\u9fa5]+$/i;
+		  	if(reg.test(str)){
+		   		return true;
+		  	}else{
+		   		return false;
+		  	}
+		}
+
+		function showLoginNow(){
+			$("#loginBtn").hide();
+			$("#loginNowBtn").show();
+		}
+
+		function hideLoginNow(){
+			$("#loginBtn").show();
+			$("#loginNowBtn").hide();
+		}
+		//更换图片验证码
+		function changeImage(){
+			gImgVerCdeErrorCount = 0;
+			document.getElementById("loginImgSrc").src = 'https://vcs.suning.com/vcs/imageCode.htm?uuid='
+			+ "760f53a1-9624-40ee-a7c1-3a5619e8c64a" + "&yys=" + new Date().getTime() ;
+			//隐藏错误提示
+			showVerifyCodeNone();
+		}
+
+		// BTCMEMII-1019 登陆弹框优化
+		// 显示大写键提示信息
+		function showCapsLockInfo() {
+			//$("#capsLockInfoMsgDiv").show();
+			showTopTipMsg("键盘大写锁定已打开，请注意大小写。");
+		}
+		// 隐藏大写键提示信息
+		function hideCapsLockInfo() {
+			var msg = $("#topErrorMsgSpan").html();
+			//当在密码输入框中输入正常的时候，错误提示的内容是"键盘大写",的时候，错误提示消失
+			if(msg.indexOf("键盘大写")!=-1){
+				hideTopErrorMsg();
+			}
+		}
+		// 在上部显示统一的错误信息
+		function showTopErrorMsg(msg) {
+			$("#topErrorMsgDiv").find("i").removeClass("tip-info-16").addClass("tip-error-16");
+			$("#topErrorMsgSpan").html(msg);
+			$("#topErrorMsgDiv").show();
+		}
+		// 隐藏上部统一的错误信息
+		function hideTopErrorMsg() {
+			$("#topErrorMsgDiv").hide();
+			$("#topErrorMsgSpan").html("");
+		}
+
+		// 在上部显示统一的提示信息
+		function showTopTipMsg(msg) {
+			$("#topErrorMsgDiv").find("i").removeClass("tip-error-16").addClass("tip-info-16");
+			$("#topErrorMsgSpan").html(msg);
+			$("#topErrorMsgDiv").show();
+		}
+
+		//显示图片验证码正确
+		function showVerifyCodeOK(){
+			showVerifyCodeNone();
+			$("#checkCodeBlock").find("i").show();
+			$("#checkCodeBlock").find("i").addClass("tip-icon tip-ok check-pic-tips");
+			$("#loginVerifyCde").removeClass("ui-text-error");
+		}
+
+
+		//显示图片验证码错误
+		function showVerifyCodeError(){
+			showVerifyCodeNone();
+			$("#checkCodeBlock").find("i").show();
+			$("#checkCodeBlock").find("i").addClass("tip-icon tip-error-16 check-pic-tips");
+			$("#loginVerifyCde").addClass("ui-text-error");
+		}
+
+		//隐藏图片验证码错误/正确
+		function showVerifyCodeNone(){
+			$("#checkCodeBlock").find("i").hide();
+			$("#checkCodeBlock").find("i").removeClass("tip-icon tip-ok check-pic-tips");
+			$("#checkCodeBlock").find("i").removeClass("tip-icon tip-error-16 check-pic-tips");
+			$("#loginVerifyCde").removeClass("ui-text-error");
+		}
+
+		//图片验证码框中焦点移除的时候，进行提示
+		function checkValidateCodeOnBlur(){
+			var vcd = $("#loginVerifyCde").val();
+			if (vcd == null || vcd == "") {
+				//xx$("#loginVerifyCdeErrMsg").html("");
+				//hideTopErrorMsg();
+				return false;
+			}else if(vcd.length == 4){
+				return true;
+			}else{
+				//没有在提交中的时候进行提交操作
+				//xx$("#loginVerifyCdeErrMsg").html("验证码格式不正确，请重新输入");
+				showVerifyCodeError();
+				//showTopErrorMsg("验证码格式不正确，请重新输入");
+				return false;
+			}
+		}
+
+		//图片验证码框中焦点移除的时候，进行提示
+		function checkValidateCodeOnSubmit(){
+			var vcd = $("#loginVerifyCde").val();
+			if (vcd == null || vcd == "") {
+				showTopErrorMsg("请输入验证码!");
+				showVerifyCodeError();
+				return false;
+			}else if(vcd.length == 4){
+				return true;
+			}else{
+				//没有在提交中的时候进行提交操作
+				showTopErrorMsg("验证码不正确，请重新输入。");
+				showVerifyCodeError();
+				return false;
+			}
+		}
+
+
+		//初始的时候设置用户名的提示 ：是否显示用户名/邮箱/手机号
+		function setInitLogonIdinfo(){
+			if($("#loginName").val().length == 0){
+				$("#loginName").focus();
+			}else{
+				$("#loginPassword").focus();
+			}
+		}
+
+
+
+		//图片验证码位置按键的弹起事件
+		function onKeyUpForValidate(evt){
+			//兼容IE和Firefox获得keyBoardEvent对象
+			evt = (evt) ? evt : ((window.event) ? window.event : "")
+			//兼容IE和Firefox获得 keyBoardEvent对象的键值
+			var keyCode = evt.keyCode?evt.keyCode:evt.which;
+			if(keyCode==13) {
+				preSubmitForm();
+			}else{
+				//仅仅进行校验图片验证码
+				checkLoginVerifyCode(false);
+			}
+		}
+
+
+		//图片验证码的位置提交图片验证码
+		function preSubmitForm(){
+			if(needVerifyCodeVal){
+				//进行图片的校验，并且提交表单
+				if(validateLoginData()&&checkValidateCodeOnSubmit()){
+					checkLoginVerifyCode(true);
+				}
+			}else{
+				submitForm();
+			}
+		}
+
+		//提交登录
+		function submitForm(){
+			if (validateLoginData()){
+				//影藏登陆，展示正在登录按钮
+				showLoginNow();
+				var rememberMeCheckVal = document.getElementById("rememberMeCheck").checked;
+				$('#rememberMe').val(rememberMeCheckVal);
+				$('#_loginForm').submit();
+				//如果登陆请求无反应，设定5秒后登录按钮恢复
+				setTimeout(function(){hideLoginNow()},5000);
+			}else{
+				//如果有出现图片验证码的时候需要刷新图片验证码
+				if (needVerifyCodeVal) {
+					changeImage();
+				}
+				hideLoginNow();
+			}
+		}
+		//从浏览器获取cookies add by 12072549
+		function getCookie(cookieName){
+			var arrStr = document.cookie.split("; ");
+			for(var i = 0;i < arrStr.length;i ++){
+				var temp = arrStr[i].split("=");
+				if(temp[0] == cookieName){
+					return unescape(decodeURI(temp[1]));
+				}
+			}
+			return "";
+		}
+
+
+		//检测满座网cookies信息  add by 12072549
+		function checkCookie(){
+			//满座网未绑定的标记
+			var mzonotbinding = getCookie('mz_user_not_binding');
+			//满座网手机
+			var mzphone = getCookie('mz_user_phone');
+			//满座网手机
+			var mzemail = getCookie('mz_user_email');
+			var logonid ;
+			if ( mzonotbinding!=null && mzonotbinding!=""){
+				$("#manzuoWinBox").removeClass("hide");
+				$("#normalwinBox").addClass("hide");
+				//如果手机为空，则LogonId是邮箱
+				if ( mzphone!=null && mzphone!="" && mzphone!="\"\""){
+					logonid = mzphone;
+				} else{
+					logonid = mzemail;
+				}
+				$("#msgbox").html('<i class="tip-icon tip-info-16 l"></i><p class="msgbox-msg l">检测您的满座账号<span>'+ logonid +'</span>已经登录，是否使用此账号直接登录苏宁易购？</p>');
+			}
+		}
+		//用户选择满座帐号登录  add by 12072549
+		//serviceStr是最终的跳转地址
+		function chooseManZuo(){
+			parent.location.href = getMZURL ;
+		}
+
+		//用户选择易购帐号登录  add by 12072549
+		function chooseSuning(){
+			$("#manzuoWinBox").addClass("hide");
+			$("#normalwinBox").removeClass("hide");
+		}
+
+		//检测华夏基金等信任登录的cookies信息
+		function checkTrustCookie() {
+			//信任登录未绑定的标记
+			var trustbinding = getCookie('trust_user_not_binding');
+			if ( trustbinding != null && trustbinding != "") {
+				var redirectUrl = comm_bind_url + "?trustType=normal&bindingTicket="+trustbinding+"&targetUrl="+decodeURIComponent(serviceStr);
+				setTimeout(function(){parent.location.href = popup_container_handler_config.topLocation + "#loginRedirect:"+encodeURIComponent(redirectUrl) ;},1000)
+			}
+		}
+
+		$(document).ready(function(){
+			//设置路径
+			setURL();
+			//设置是否显示验证码
+			initShowVerifyCode();
+			//检测满座网cookies信息  add by 12072549
+			checkCookie();
+			//检测华夏基金等信任登录的cookies信息
+			checkTrustCookie();
+			//显示错误信息;
+			showServerErrorMsg();
+			//BTCMEMII-1918  登录图片验证码判断正确后加入ICON提示
+			showVerifyCodeNone();
+
+			//登录页面各种输入框事件
+			$("#loginName").keypress(function(event) {
+				enterKeyEvent(event, "loginBtn");
+			}).blur(function(){
+				loginNameOnblur();
+			});
+			$("#loginPassword").keypress(function(event){
+				enterKeyEvent(event, "loginBtn");
+				checkCapsLock(event, "#loginPwdErrMsg");
+			}).blur(function(){
+				//checkLoginPwd();
+			});
+
+			//图片验证码的事件响应
+			$("#loginVerifyCde").keyup(onKeyUpForValidate);
+
+
+			$("#loginVerifyCde").blur(function(){
+				checkValidateCodeOnBlur();
+			});
+
+			//登录按钮事件绑定
+			$("#loginBtn").bind("click", function() {
+				preSubmitForm();
+				//return false;
+			});
+
+			//点击图片验证码图片验证码修改变化
+			$("#loginImgSrc").click(function() {
+				changeImage();
+			});
+
+			//更换登录图片验证码
+			$("#loginChangeImage").click(function() {
+				changeImage();
+			});
+
+			//var prefix  = "https://imgssl.suning.com";
+			//var reguURL =     prefix + "/OtherArea/bzzx/memberRegu.html";
+			//var eppagreeURL=  prefix + "/OtherArea/bzzx/epp_agreement.html";
+			//var platformURL=  prefix + "/OtherArea/bzzx/snAdPlatformTreaty.html";
+			//$("#Treg_info_none_zc008").attr("href",reguURL);
+			//$("#Treg_info_none_zc009").attr("href",eppagreeURL);
+			//$("#Treg_info_none_zc010").attr("href",platformURL);
+
+			//初始的时候设置用户名的提示  验证时间：处理google浏览器中显示位置问题
+			setTimeout("setInitLogonIdinfo()",600);
+
+			//设置是否显示验证码
+			loginNameOnblur();
+
+			resize();
+			
+			account.autoLoginCheck(0);
+		});
+
+
+		//判断是否是数字
+		function isDigit(object){
+			var pattern = /^([0-9]+)$/;
+			return pattern.test(object);
+		}
+		//回车事件
+		function enterKeyEvent(event, btnId){
+			if (event.which == 13) {
+				$("#"+btnId).click();
+			}
+		}
+
+		String.prototype.Trim = function()
+		{
+			return this.replace(/(^\s*)|(\s*$)/g, "");
+		}
+
+		/** Public.js */
+		var Public = function(){};
+
+
+		Public.isDigit = function(object){
+			var pattern = /^([0-9]+)$/;
+			return pattern.test(object);
+		};
+
+		Public.isNullOrEmpty = function(str){
+			return null == str || str.length == 0;
+		};
+
+
+		//是否全是字母或者数字
+		function isAllLetterOrNum(str) {
+			var patIsAllLetter = /^[0-9a-zA-Z]+$/;
+			return patIsAllLetter.test(str);
+		}
+
+		//全部为汉字
+		function isChn(str){
+			var reg = /^[\u4E00-\u9FA5]+$/;
+			if(!reg.test(str)){
+				//alert("不是中文");
+				return false;
+			}else{
+				//alert("中文");
+				return true;
+			}
+		}
+
+	</script>
+	<script type="text/javascript" src="saved_resource(3)"></script>
+	<script type="text/javascript" src="saved_resource(4)"></script>
+</head>
+<body style="background:none;color:#333;">
+<div id="winWrapper" class="win-wrapper" style="z-index: 10098; display: block;">
+	<img src="pop-reg.png" width="51" height="51" class="dialog-lion">
+	<!-- 快速登录注册弹出 [[ -->
+	<!--[if lt IE 7]><iframe class="mask-iframe" src="https://sslres.suning.com/project/passport/login/b2c_pop/images/blank.gif"></iframe><![endif]-->
+	<div id="winBox">
+		<div class="win-main" style="width:400px;">
+			<div class="win-mask"></div>
+			<div class="win-inner">
+				<div class="title">
+					<h3 id="title-h3">欢迎您登录苏宁易购会员</h3>
+					<em><a href="javascript:void(0);" class="close" id="close-pop" title="关闭窗口">×</a></em>
+				</div>
+
+				<!-- 用户选择满座帐号登录还是选择易购帐号登录的弹窗  start-->
+				<style type="text/css">
+					.showin-net-login{padding:15px 10px; height:360px; }
+					.msgbox{ padding-bottom:20px; _height:40px; border-bottom:solid 1px #EEE; color:#333; overflow:hidden; }
+					.msgbox .msgbox-msg{ margin-left:5px; width:310px; }
+					.msgbox span{ color:#999; }
+					.msgbox i{ margin-left:20px; margin-top:1px; }
+					.logo-link img{ margin-top:56px;}
+					.logo-link p{ margin-top:15px;}
+					.ml15{ margin-left:15px; }
+				</style>
+
+				<div class="showin-net-login hide" id="manzuoWinBox">
+					<table width="100%">
+						<tbody><tr>
+							<td colspan="2">
+								<div class="msgbox" id="msgbox">
+								</div>
+							</td>
+						</tr>
+						<tr align="center" class="logo-link">
+							<td>
+								<a href="javascript:void(0)" onclick="chooseManZuo()" name="TLogon_manzuo_index_dl001"><img class="ml15" src="logo_mz.png"></a>
+								<p><a class="ml15" href="javascript:void(0)" onclick="chooseManZuo()" name="TLogon_manzuo_index_dl001">使用满座网账号登录&gt;</a></p>
+							</td>
+							<td>
+								<a href="javascript:void(0)" onclick="chooseSuning()" name="TLogon_manzuo_index_dl002"><img src="logo_sn.png"></a>
+								<p><a href="javascript:void(0)" onclick="chooseSuning()" name="TLogon_manzuo_index_dl002">使用易购账号登录&gt;</a></p>
+							</td>
+						</tr>
+					</tbody></table>
+				</div>
+				<!-- 用户选择满座帐号登录还是选择易购帐号登录的弹窗  end-->
+				<div class="acc-win" id="normalwinBox">
+					<div class="acc-tab mt20 mb10">
+						<ul class="tab-items" id="tabWrap">
+							<li class="selected mr5" id="li_login"><a name="TLogon_index_none_dl001"><span>登 录</span></a></li>
+							<li id="li_reg"><a name="TLogon_index_none_dl002" id="registerBtn" href="https://reg.suning.com/popreg.do?topLocation=http%3A%2F%2Fwww.suning.com%2F"><span>注 册</span></a></li>
+						</ul>
+					</div>
+					<div class="tab-cont reg clearfix mb28">
+						<div class="page-error ml50 hide" id="topErrorMsgDiv">
+							<i class="tip-icon tip-error-16"></i><span id="topErrorMsgSpan"></span>
+						</div>
+						<!--登录 [[-->
+						<form class="acc-form pt10 ml50" method="post" name="Logon" id="_loginForm">
+							<input type="hidden" name="service" value="https://ssl.suning.com/webapp/wcs/stores/servlet/popupLoginSuccess?storeId=10052&amp;catalogId=10051&amp;topLocation=http%3A%2F%2Fwww.suning.com%2F">
+							<input type="hidden" name="uuid" value="760f53a1-9624-40ee-a7c1-3a5619e8c64a">
+							<input type="hidden" id="secPassword" name="secPassword">
+							<input type="hidden" name="fromPop" value="true">
+							<input type="hidden" name="loginTheme" value="b2c_pop">
+							<input type="hidden" name="logonWin" value="logonWin">
+							<input type="hidden" id="rememberMe" name="rememberMe" value="">
+							<dl class="user-name lev2">
+								<dd class="auto-email">
+									<div class="reg-text-name">账号</div>
+									<input type="text" class="ui-text" name="username" value="" id="loginName" maxlength="50" autocomplete="off">
+									<span class="tip-ok-wrap hide"><i class="tip-icon tip-ok"></i></span>
+									<span class="default-name">用户名/邮箱/手机号</span>
+									<div class="email-list hide" style="display: none;"></div>
+								</dd>
+							</dl>
+							<dl class="lev1">
+								<dd>
+									<div class="reg-text-name">密码</div>
+									<input type="password" class="ui-text" style="font-size:14px;" name="password" autocomplete="off" id="loginPassword" minlength="6" maxlength="20">
+									<span class="tip-ok-wrap hide"><i class="tip-icon tip-ok"></i></span>
+
+								</dd>
+							</dl>
+							<dl class="reg-check lev1" id="checkCodeBlock" style="">
+								<dd class="nopadding-btm">
+									<div class="reg-text-name">验证码</div>
+									<input type="text" class="ui-text" name="verifyCode" id="loginVerifyCde" autocomplete="off" maxlength="4">
+									<i class="" style="display: none;"></i>
+									<img width="70" height="30" src="imageCode(1).htm" id="loginImgSrc">
+									<a href="javascript:void(0)" name="TLogon_index_none_dl004" id="loginChangeImage">换一张</a>
+								</dd>
+							</dl>
+							<!-- 自动登录 [[ -->
+							<dl class="auto-login clearfix">
+								<label class="auto-label"><input type="checkbox" checked="" id="rememberMeCheck"><span>自动登录</span></label>
+								<div class="warn-msg" style="display: block;">
+                                	<p><i class="nms-ico nms-ico-warn16"></i>公共场所不建议自动登录！</p>
+                        		</div>
+							</dl>
+							<!-- 自动登录 ]] -->
+							<dl class="acc-act lev1">
+								<dd class="pb5">
+									<a class="reg-login-btn" name="TLogon_index_none_dl003" href="https://passport.suning.com/ids/login?service=https%3A%2F%2Fssl.suning.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FpopupLoginSuccess%3FstoreId%3D10052%26catalogId%3D10051%26topLocation%3Dhttp%253A%252F%252Fwww.suning.com%252F&loginTheme=b2c_pop#" id="loginBtn"><span><b>登　录</b></span></a>
+									<a class="reg-login-now-btn" href="https://passport.suning.com/ids/login?service=https%3A%2F%2Fssl.suning.com%2Fwebapp%2Fwcs%2Fstores%2Fservlet%2FpopupLoginSuccess%3FstoreId%3D10052%26catalogId%3D10051%26topLocation%3Dhttp%253A%252F%252Fwww.suning.com%252F&loginTheme=b2c_pop#" id="loginNowBtn" style="display:none"><span><b>正在登录</b></span></a>
+
+								</dd>
+							</dl>
+							<dl class="lev1 clearfix">
+								<dd class="line-height20">
+									<div class="tip-box">
+										<a href="https://aq.suning.com/asc/forgetpsw.do" id="get_secret_id" name="TLogon_index_none_dl005" target="_blank">忘记密码?</a>
+									</div>
+								</dd><dd>
+							</dd></dl>
+							<div style="clear:both;"></div>
+						</form>
+						<!--  将协议给注释掉
+					    <div class="doc-list">
+	                        <a target="_blank" id="Treg_info_none_zc008" name="Treg_info_none_zc008" href="#">《苏宁易购会员章程》</a>
+                            <a target="_blank" id="Treg_info_none_zc009" name="Treg_info_none_zc009" href="#">《易付宝协议》</a>
+                            <a target="_blank" id="Treg_info_none_zc010" name="Treg_info_none_zc010" href="#">《苏宁广告联盟在线协议》</a>
+	                    </div>
+	                     -->
+						<!--登录 ]]-->
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 快速登录注册弹出 ]] -->
+</div>
+<iframe class="screenIfm" style="display:none;" scrolling="no" frameborder="0"></iframe>
+<script type="text/javascript">
+	/**
+	 * 更新记录：
+	 * 1.增加对采集元素包裹文字中包含的“|”进行处理（2014/1/21）
+	 */
+	/**
+	 * 第一步：在页面引入基础代码
+	 * 埋点前请检查页面是否已经埋入此代码，避免重复引入代码
+	 * 此部分代码不允许修改，若私自修改源码导致出现的问题，后果自负
+	 */
+	eval(function(p,a,c,k,e,d){e=function(c){return(c<a?'':e(parseInt(c/a)))+((c=c%a)>35?String.fromCharCode(c+29):c.toString(36))};if(!''.replace(/^/,String)){while(c--){d[e(c)]=k[c]||e(c)}k=[function(e){return d[e]}];e=function(){return'\\w+'};c=1};while(c--){if(k[c]){p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c])}}return p}('2 b;5(!b)b={};5(!b.B)b.B={};(4(){2 1b=/^\\w*?.j.q$/,1h=e.T.1M,N=(("1q:"==e.T.N)?"1q://":"1J://"),1C=1d(),8="|",1o=T.X,1g=u(1B(1o));4 J(9){2 7=9.7?u(9.7):"7 y",p=9.p?u(9.p):"p y",c=l 1K(),1m=(Y(9,c),c)?u(c.1I("").1t(/\\s|\\|/1H,"")):"1F y",k=(k=e.1A("1G"))?k.x:"",13=p+8+7+8+1m,D=(D=e.1A("1L"))?D.x:"",1n=N+1C+"/1E.1R",P=1i(),R="R";19(R,P,\'/\',"","");2 12=17("1S"),1j=1Q 1a=="1P"?1a.15:"1N 1O 1T 15",1v=P+8+12+8+13+8+1g,V=9.X?9.X:\'\',K=(V?1y(V):\'-\'),1z=1n+"?"+"1D="+1v+"&"+"1X="+D+"&"+"k="+k+"&"+"2d="+1j+\'&\'+\'2e=\'+K;16(1z)}4 1i(){2 14=l O(),m=1e.2c(2b*1e.2g()),1u=14.W().2a().2f(m);6 1u}4 17(7){2 S=e.1x.18("; ");1k(2 i=0;i<S.z;i++){2 U=S[i].18("=");5(U[0]==7)6 2i(U[1])}}4 16(1f){2 n="2l"+(l O()).W();2 i=11[n]=l 2j();i.2h=(i.2k=4(){11[n]=G});i.29=1f+"&27="+n;i=G}4 1d(){5(1b.1Z(1h)){6"B.j.10/b"}I{6"1U.j.10/b"}}4 1s(){6 e.g}4 19(7,x,C,E,g){2 d=7+"="+1Y(x);5(E!=""){2 F=l O();F.28(F.W()+E);d+=";E="+F.1V()}5(C!=""){d+=";C="+C}2 M=1s();5(M.t(".j.q")!=-1){d+=";g=.j.q"}I 5(M.t(".1w.q")!=-1){d+=";g=.1w.q"}I{d+=";g="+g}e.1x=d}4 1y(r){2 L=\'-\';5(!h(r)){L=1r(r,\'K\',\'&\')}6 L}4 1B(a){5(a.z>1W){a=a.1p(0,20)}21(a.t(8)!=-1){a=a.1t(8,"--")}6 a}4 Y(n,c){5(n.1l==3){c.26(n.25)}I 5(n.1l==1){1k(2 m=n.24;m!=G;m=m.22){Y(m,c)}}}4 u(s){6 s!=G?23(s):""}4 1r(f,A,Q){2 Z="-",v;5(!h(f)&&!h(A)&&!h(Q)){v=f.t(A);5(v>-1){2 H=f.t(Q,v);5(H<0){H=f.z}Z=f.1p(v+A.z+1,H)}}6 Z}4 h(o){6(y==o||\'\'==o||\'-\'==o)}2 1c=b.B;1c.J=J})();',62,146,'||var||function|if|return|name|_tag|data|urlOrTitle|sa|_strings|str|document|map|domain|IsEmpty||suning|_type|new||||id|com|||indexOf|_encode|idx||value|undefined|length|key|click|path|_errorCode|expires|date|null|endIdx|else|sendDatasIndex|sid|SID|dm|protocol|Date|oId|separator|_snck|arrStr|location|temp|aHref|getTime|href|_getString|result|cn|window|pvId|Datas|now|cityId|httpGifSendIndex|getCookieIndex|split|_addCookie4Index|sn|sn_prd_reg|_click|getServer|Math|strURL|_shortToUrl|hostName|getOnlyIdIndex|_cityId|for|nodeType|_text|clickUrl|_toUrl|substring|https|Pick|_getDomain|replace|onlyId|cDatas|cnsuning|cookie|GetSID|url|getElementById|_cutUrlToShort|server|_snmk|ajaxClick|text|resourceType|ig|join|http|Array|errorCode|hostname|can|not|object|typeof|gif|_snmp|get|clicksit|toGMTString|301|_snme|escape|test|300|while|nextSibling|encodeURIComponent|firstChild|nodeValue|push|iId|setTime|src|toString|100000|round|_cId|_sid|concat|random|onload|unescape|Image|onerror|log_'.split('|'),0,{}))
+	/**
+	 * 第二步：为元素绑定click事件
+	 * 技术支持：此方案需要jQuery支持，使用此方案前请确认使用的jquery版本对live方法的支持性
+	 * 功能：为点击对象添加点击事件处理函数
+	 * 示例解释：下面的示例中是为标签的name以test_dac_index_开头的元素埋点，实际生产中的name属性命名约束请联系贺婷芳(12061488)确认；未经确认不得埋点，否则引起冲突后果自负
+	 * 示例修改：在具体埋点过程中请开发人员根据具体的name修改a[name^=\*需要埋点的name*\]或者input[name^=\*需要埋点的name*\]
+	 * 命名技术规范：标签的name,id属性不能含有"|"
+	 */
+
+	$(document).ready(function(){
+		//登录页面发送数据到SA
+		$("a[name*=TLogon_index_none_],input[name*=TLogon_index_none_]").live("click",function(){
+			//sendDatasMember(this);
+			sa.click.sendDatasIndex(this);
+		});
+	});
+</script>
+<script type="text/javascript" src="porto.js"></script>
+<script type="text/javascript">
+	porto.init({
+		partnerCode:'none',
+		appName:'passport',
+		referenceId:'123',
+		sessionId:'123',
+		serviceUrl:"https://fp.suning.com/bennu-collector/fp/porto.json"
+	});
+</script><span><object type="application/x-shockwave-flash" data="https://fp.suning.com/bennu-collector/fp/porto.swf" width="1" height="1" id="ffp"><param name="movie" value="https://fp.suning.com/bennu-collector/fp/porto.swf"><param name="allowScriptAccess" value="always"><param name="flashVars" value="partner-code=none&amp;session-id=123&amp;app-name=passport&amp;service-url=https://fp.suning.com/bennu-collector/fp/porto.json"></object></span>
+</body></html>

@@ -1,0 +1,1 @@
+getNumberCallback00({"returnCode":"0","returnMsg":"成功","shopFavoritedCnt":[{"shopId":"0070086258","shopCustCnt":"129619"},{"shopId":"0070067092","shopCustCnt":"228298"}]})
